@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://resumv.com/sitemap.xml
+Sitemap: https://kkvlove.github.io/resumv/sitemap.xml
