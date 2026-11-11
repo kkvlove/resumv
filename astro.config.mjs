@@ -33,6 +33,7 @@ export default defineConfig({
       },
     },
   },
-  site: "https://resumv.com",
+  site: "https://kkvlove.github.io",
+  base: "/resumv",
   trailingSlash: "always",
 });
