@@ -1,7 +1,7 @@
 ---
 const {title, description, noindex=false, schema=[]} = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site || 'https://resumv.com');
-const organization = {'@type':'Organization','@id':'https://resumv.com/#organization',name:'Resumv',url:'https://resumv.com/',sameAs:['https://github.com/liusha-com/resumv']};
+const organization = {'@type':'Organization','@id':'https://kkvlove.github.io/resumv/#organization',name:'Resumv',url:'https://kkvlove.github.io/resumv/',sameAs:['https://github.com/kkvlove/resumv']};
 const structured = {'@context':'https://schema.org','@graph':[organization, ...schema]};
 ---
 <title>{title} | resumv</title>
@@ -16,12 +16,5 @@ const structured = {'@context':'https://schema.org','@graph':[organization, ...s
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content={`${title} | resumv`}/>
 <meta name="twitter:description" content={description}/>
-<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-K9BQT3MPCN"></script>
-<script is:inline>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-K9BQT3MPCN');
-  </script>
 </>
 <script type="application/ld+json" set:html={JSON.stringify(structured).replace(/</g,'\\u003c')}/>
