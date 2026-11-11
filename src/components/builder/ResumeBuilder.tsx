@@ -66,6 +66,7 @@ import { exportMarkdown } from "../../lib/markdown-export";
 import ResumeCanvas from "./ResumeCanvas";
 import RichText from "./RichText";
 import "../../styles/builder.css";
+const BASE = import.meta.env.BASE_URL;
 
 type SectionKey = keyof ResumeData["sections"];
 const icons: Record<string, typeof UserRound> = {
@@ -547,7 +548,7 @@ export default function ResumeBuilder({
       <div className="builder-error">
         <h1>Let’s protect your work.</h1>
         <p>{fatal}</p>
-        <a href="/documents/">Return to My documents</a>
+        <a href={BASE+"documents/"}>Return to My documents</a>
       </div>
     );
   if (!data)
@@ -611,12 +612,12 @@ export default function ResumeBuilder({
         <div className="builder-identity">
           <a
             className="back-docs"
-            href="/documents/"
+            href={BASE+"documents/"}
             aria-label="Back to documents"
           >
             <ArrowLeft size={19} />
           </a>
-          <a className="builder-logo" href="/">
+          <a className="builder-logo" href={BASE}>
             resumv<span>.</span>
           </a>
           <span className="top-separator" />
@@ -655,7 +656,7 @@ export default function ResumeBuilder({
           <span className="top-separator" />
           <a
             className="builder-new"
-            href="/builder/?new=1"
+            href={BASE+"builder/?new=1"}
           >
             <Plus size={16} />
             New
@@ -1263,7 +1264,7 @@ export default function ResumeBuilder({
             <div className="sample-banner">
               <Sparkles size={14} />
               <span>Sample content — replace it with your own story.</span>
-              <a href="/builder/?new=1">
+              <a href={BASE+"builder/?new=1"}>
                 Start blank
               </a>
             </div>
@@ -1370,7 +1371,7 @@ export default function ResumeBuilder({
                     >
                       <span className="template-thumb">
                         <img
-                          src={`/templates/${t.id}.jpg`}
+                          src={`${BASE}templates/${t.id}.jpg`}
                           alt={`${t.name} template preview`}
                           loading="lazy"
                         />
@@ -1839,7 +1840,7 @@ export default function ResumeBuilder({
             )}
           </div>
           <div className="template-attribution">
-            <a href="/licenses/">Templates by Reactive Resume ↗</a>
+            <a href={BASE+"licenses/"}>Templates by Reactive Resume ↗</a>
             <span>Open source · MIT</span>
           </div>
         </aside>
