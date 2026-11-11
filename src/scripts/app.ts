@@ -1,4 +1,5 @@
 import { setupCheckerImport } from './checker-import';
+const BASE = import.meta.env.BASE_URL;
 import { examples, templates } from '../data/content';
 import { sanitizeResume, exportText } from '../lib/resume-model';
 type Entry = {position:string;company:string;dates:string;description:string};
@@ -44,7 +45,7 @@ if($('#editor')){
  $$('[data-export]').forEach(el=>el.addEventListener('click',()=>{save();const format=el.dataset.export;const name=(current.title||'resume').replace(/[^\w\s-]/g,'').trim()||'resume';if(format==='pdf'){document.title=`${current.name||name} - ${kind==='letter'?'Cover Letter':'Resume'}`;window.print();}else if(format==='txt')download(plain(current),'text/plain;charset=utf-8',name+'.txt');else if(format==='json')download(JSON.stringify(current,null,2),'application/json',name+'.json');else download(`<!doctype html><html><head><meta charset="utf-8"><title>${esc(current.title)}</title><style>body{font-family:Arial;color:#222;font-size:11pt}h1{color:${current.color}}h2{font-size:12pt;border-bottom:1px solid #ddd}h3{font-size:11pt}p{white-space:pre-line;line-height:1.5}</style></head><body>${html(current)}</body></html>`,'application/msword',name+'.doc');}));
  render();if(example||params.has('template'))save();
 }
-function documentRoute(d:Doc){return d.kind==='letter'?'/cover-letter/':'/builder/';}
+function documentRoute(d:Doc){return d.kind==='letter'?`${BASE}cover-letter/`:`${BASE}builder/`;}
 if($('#documents-list')){
  let pending='';const dialog=$<HTMLDialogElement>('#delete-dialog')!;
  const refresh=()=>{const docs=readDocs().sort((a,b)=>b.updated.localeCompare(a.updated));$('#documents-empty')!.hidden=docs.length>0;$('#documents-list')!.innerHTML=docs.map(d=>`<article class="content-card document-card"><span class="card-tag">${d.kind==='letter'?'Cover letter':d.kind.toUpperCase()}</span><h2>${esc(d.title)}</h2><p>${esc(d.name||'Your name')}<br/>${esc(d.role||'Ready for your next move')}</p><span class="hint">Updated ${esc(new Date(d.updated).toLocaleDateString('en-US'))}</span><div class="doc-actions"><a class="button primary small" href="${documentRoute(d)}?id=${encodeURIComponent(d.id)}">Edit</a><button data-duplicate="${esc(d.id)}">Duplicate</button><button data-delete="${esc(d.id)}">Delete</button></div></article>`).join('');$$('[data-delete]').forEach(el=>el.addEventListener('click',()=>{pending=el.dataset.delete!;dialog.showModal();}));$$('[data-duplicate]').forEach(el=>el.addEventListener('click',()=>{const all=readDocs();const source=all.find(x=>x.id===el.dataset.duplicate);if(!source)return;const copy=normalize(source);copy.id=crypto.randomUUID();copy.title+=' (copy)';copy.updated=new Date().toISOString();if(writeDocs([copy,...all])){refresh();toast('Document duplicated.');}}));};
