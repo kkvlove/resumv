@@ -11,7 +11,7 @@ for(const file of pages){
  const doc=parse(readFileSync(file,'utf8'));docs.set(path,doc);
  assert.equal(doc.querySelector('html').getAttribute('lang'),'en',path);
  assert.equal(doc.querySelectorAll('link[rel=canonical]').length,1,path);
- assert.equal(doc.querySelector('link[rel=canonical]').getAttribute('href'),'https://resumv.com'+(path==='/404.html'?'/404/':path==='/cv/'?'/builder/':path),path);
+ assert.equal(doc.querySelector('link[rel=canonical]').getAttribute('href'),'https://kkvlove.github.io/resumv'+(path==='/404.html'?'/404/':path==='/cv/'?'/builder/':path),path);
  for(const script of doc.querySelectorAll('script[type="application/ld+json"]')) JSON.parse(script.textContent);
  if(!doc.querySelector('meta[name=robots]')?.getAttribute('content').includes('noindex')){
   const title=doc.querySelector('title').textContent,desc=doc.querySelector('meta[name=description]').getAttribute('content');
@@ -22,16 +22,16 @@ for(const file of pages){
  for(const node of doc.querySelectorAll('a[href],img[src],script[src],link[href]')){
   const raw=node.getAttribute('href')||node.getAttribute('src');
   if(!raw?.startsWith('/')||raw.startsWith('//'))continue;
-  const url=new URL(raw,'https://resumv.com');
-  const target=join(root,decodeURIComponent(url.pathname));
+  const url=new URL(raw,'https://kkvlove.github.io/resumv');
+  const target=join(root,decodeURIComponent(url.pathname).replace(/^\/resumv/,'' )||'/');
   assert(existsSync(target)||existsSync(join(target,'index.html')),`${path} -> ${raw}`);
  }
 }
 const mapped=JSON.parse(readFileSync('src/data/seo/keyword-map.json','utf8'));
-for(const row of mapped){const url=new URL(row.target_url,'https://resumv.com');const doc=docs.get(url.pathname);assert(doc,row.target_url);if(url.hash)assert(doc.querySelector(url.hash),row.target_url);}
+for(const row of mapped){const url=new URL(row.target_url,'https://kkvlove.github.io/resumv');const doc=docs.get(url.pathname);assert(doc,row.target_url);if(url.hash)assert(doc.querySelector(url.hash),row.target_url);}
 const sitemap=parse(readFileSync(join(root,'sitemap.xml'),'utf8'));
 for(const loc of sitemap.querySelectorAll('loc')){
- const path=new URL(loc.textContent).pathname;assert(docs.has(path),path);
+ const path=new URL(loc.textContent).pathname.replace(/^\/resumv/,'');assert(docs.has(path),path);
  assert(!docs.get(path).querySelector('meta[name=robots]').getAttribute('content').includes('noindex'),path);
 }
 for(const path of ['/builder/','/cv/','/documents/'])assert(docs.get(path).querySelector('meta[name=robots]').getAttribute('content').includes('noindex'),path);
@@ -39,10 +39,10 @@ const roles=JSON.parse(readFileSync('src/data/roles.json','utf8'));
 for(const role of roles){
  assert(readFileSync(join(root,`downloads/${role.slug}-template.txt`),'utf8').length>300);
  assert(!existsSync(join(root,`downloads/${role.slug}-example.txt`)));
- assert(docs.get(`/templates/${role.slug}/`).querySelector(`a[href="/builder/?example=${role.slug}&preset=blank"]`),role.slug);
- assert(docs.get(`/templates/${role.slug}/`).querySelector(`a.button.primary[href="/builder/?example=${role.slug}"]`),role.slug);
+ assert(docs.get(`/templates/${role.slug}/`).querySelector(`a[href="/resumv/builder/?example=${role.slug}&preset=blank"]`),role.slug);
+ assert(docs.get(`/templates/${role.slug}/`).querySelector(`a.button.primary[href="/resumv/builder/?example=${role.slug}"]`),role.slug);
  assert(docs.get(`/templates/${role.slug}/`).textContent.includes(role.bullets[2]),role.slug);
- assert(docs.get(`/templates/${role.slug}/`).querySelector(`img[src="/templates/roles/${role.slug}.jpg"]`),role.slug);
+ assert(docs.get(`/templates/${role.slug}/`).querySelector(`img[src="/resumv/templates/roles/${role.slug}.jpg"]`),role.slug);
 }
 assert(![...docs.keys()].some(path=>path.startsWith('/examples/')));
 console.log(`Passed: ${pages.length} HTML pages, ${sitemap.querySelectorAll('loc').length} sitemap URLs, ${mapped.length} keyword targets, ${roles.length} TXT downloads.`);
