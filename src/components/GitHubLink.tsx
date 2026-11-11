@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Star } from 'lucide-react';
 import '../styles/github-link.css';
 
-const repository = 'https://github.com/liusha-com/resumv';
+const repository = 'https://github.com/kkvlove/resumv';
 const cacheKey = 'resumv:github-stars';
 const ttl = 15 * 60 * 1000;
 let pending: Promise<number | null> | undefined;
@@ -16,7 +16,7 @@ async function loadStars(): Promise<number | null> {
     }
   } catch { /* Storage may be disabled. The link still works. */ }
   try {
-    const response = await fetch('https://api.github.com/repos/liusha-com/resumv', {
+    const response = await fetch('https://api.github.com/repos/kkvlove/resumv', {
       credentials: 'omit', referrerPolicy: 'no-referrer', signal: AbortSignal.timeout(5000),
       headers: { Accept: 'application/vnd.github+json' },
     });
